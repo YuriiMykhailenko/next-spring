@@ -24,10 +24,10 @@ export default function Home() {
         targetOffset = 0;
         break;
       case "leaderboard":
-        targetOffset = scrollContainer.scrollHeight * (2 / 5); // offset 2 out of 5 pages
+        targetOffset = scrollContainer.scrollHeight * (2 / 5);
         break;
       case "about":
-        targetOffset = scrollContainer.scrollHeight * (1 / 5); // offset 4 out of 5 pages
+        targetOffset = scrollContainer.scrollHeight * (1 / 5);
         break;
       default:
         return;
@@ -41,26 +41,22 @@ export default function Home() {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Get the actual scroll container from Parallax
       const scrollContainer = parallaxRef.current?.container?.current;
       const scrollTop = scrollContainer?.scrollTop || 0;
 
       if (containerRef.current) {
-        // Slide to the left as you scroll down, with looping effect
-        const loopWidth = 2520; // Approximate width of one set of images (8 images * ~315px each)
+        const loopWidth = 2520;
         const offset = (scrollTop * 1) % loopWidth;
         containerRef.current.style.transform = `translateX(-${offset}px)`;
         containerRef.current.style.transition = "0";
       }
 
       if (moonRef.current) {
-        // Move moon horizontally based on scroll position (only left/right movement)
-        const moonOffset = scrollTop * 0.2; // Adjust multiplier for speed
+        const moonOffset = scrollTop * 0.2;
         moonRef.current.style.transform = `translate(-${moonOffset}px, 2px)`;
       }
     };
 
-    // Listen to the parallax container scroll instead of window
     const scrollContainer = parallaxRef.current?.container?.current;
     if (scrollContainer) {
       scrollContainer.addEventListener("scroll", handleScroll, {
@@ -79,7 +75,7 @@ export default function Home() {
     threshold: 0,
     triggerOnce: false,
     initialInView: false,
-    rootMargin: "0px 0px -340px 0px", // Adjust
+    rootMargin: "0px 0px -340px 0px",
   });
 
   const cardsAnimation = useSpring({
@@ -203,7 +199,6 @@ export default function Home() {
               ref={containerRef}
               className="flex gap-24 sticky top-[30vh] will-change-transform"
             >
-              {/* First set of images */}
               <Image
                 src="/solana.svg"
                 width={420}
@@ -239,7 +234,6 @@ export default function Home() {
                 alt="Image"
                 className="h-[100px] w-auto object-fit flex-shrink-0"
               />
-              {/* Second set for seamless loop */}
               <Image
                 src="/solana.svg"
                 width={420}
@@ -275,7 +269,6 @@ export default function Home() {
                 alt="Image"
                 className="h-[100px] w-auto object-fit flex-shrink-0"
               />
-              {/* Third set for extra smoothness */}
               <Image
                 src="/solana.svg"
                 width={420}
