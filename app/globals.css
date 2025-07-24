@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --gray: #8F99B0;
+  --blue-light: #C9D9FF14;
+  --purple-dark: #963488;
+  --orange: #FC6F32;
+  --purple: #B53EA4;
+  --red: #FF4A59;
+  --pink-light: #FFD6F9;
+  --orange-light: #FFCBB4;
+  --red-light: #FFBEC3;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-orange: var(--orange);
+  --color-purple: var(--purple);
+  --color-red: var(--red);
+  --color-gray: var(--gray);
+  --color-blue-light: var(--blue-light);
+  --color-purple-dark: var(--purple-dark);
+  --color-pink-light: var(--pink-light);
+  --color-orange-light: var(--orange-light);
+  --color-red-light: var(--red-light);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  
+  --gradient-primary-dark: linear-gradient(90deg, var(--purple-dark) 0%, var(--orange) 10%, var(--red) 90%);
+  --gradient-primary: linear-gradient(90deg, var(--purple) 0%, var(--orange) 10%, var(--red) 90%);
+  --gradient-primary-light: linear-gradient(90deg, var(--pink-light) 0%, var(--orange-light) 10%, var(--red-light) 90%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.gradient-text-primary {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.gradient-text-secondary {
+  background: var(--gradient-primary-light);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.gradient-text-warm {
+  background: var(--gradient-warm);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Custom gradient border utility */
+.gradient-border-wrapper {
+  background: var(--gradient-primary);
+  padding: 2px;
+}
+
+.gradient-border-inner {
+  background: transparent;
+  border-radius: 4px;
+}
+
+.gradient-card {
+  background: var(--gradient-primary-dark);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+p {
+  color: white;
+}
