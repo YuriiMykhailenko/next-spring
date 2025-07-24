@@ -45,8 +45,8 @@ export default function Home() {
       const scrollTop = scrollContainer?.scrollTop || 0;
 
       if (containerRef.current) {
-        const loopWidth = 2520;
-        const offset = (scrollTop * 1) % loopWidth;
+        const loopWidth = 1600;
+        const offset = (scrollTop * 0.4) % loopWidth;
         containerRef.current.style.transform = `translateX(-${offset}px)`;
         containerRef.current.style.transition = "0";
       }
@@ -75,12 +75,24 @@ export default function Home() {
     threshold: 0,
     triggerOnce: false,
     initialInView: false,
-    rootMargin: "0px 0px -340px 0px",
+    rootMargin: "0px 0px 0px 0px",
+  });
+
+  const { ref: aboutRef, inView: aboutInView } = useInView({
+    threshold: 0.3,
+    initialInView: false,
+    rootMargin: "-20% 0px -20% 0px",
   });
 
   const cardsAnimation = useSpring({
-    opacity: inView ? 1 : 0,
-    transform: inView ? "translateY(0px)" : "translateY(50px)",
+    opacity: inView ? 0 : 1,
+    transform: inView ? "translateY(50px)" : "translateY(0px)",
+    config: { tension: 400, friction: 60 },
+  });
+
+  const aboutAnimation = useSpring({
+    opacity: aboutInView ? 1 : 0,
+    transform: aboutInView ? "translateY(0px)" : "translateY(50px)",
     config: { tension: 280, friction: 60 },
   });
 
@@ -90,75 +102,78 @@ export default function Home() {
         <ParallaxLayer
           factor={5}
           className="bg-gradient-to-b from-black to-[#191E2A]"
-        ></ParallaxLayer>
-        <ParallaxLayer offset={0} className="w-full">
-          <ParallaxLayer
-            offset={0}
-            className="relative z-10 py-[32px] px-[80px] h-max"
+        />
+        <ParallaxLayer
+          offset={0}
+          className="relative z-10 py-[32px] px-[80px]"
+        >
+          <header
+            ref={ref}
+            id="home"
+            className="flex justify-center items-center gap-6 mb-[102px]"
           >
-            <header
-              id="home"
-              className="flex justify-center items-center gap-6 mb-[102px]"
+            <Button variant="text" onClick={() => scrollToSection("home")}>
+              How It Works
+            </Button>
+            <Button onClick={() => scrollToSection("leaderboard")}>
+              Buy Salt AI
+            </Button>
+          </header>
+          <h1
+            className={`${
+              !inView ? "gradient-text-secondary" : "gradient-text-primary"
+            } text-[clamp(3rem,5vw,8rem)] font-medium transition-all duration-500`}
+          >
+            A new economic primitive for funding decentralized AI
+          </h1>
+
+          <p>
+            We track, rank and pay for the best open source decentralized LLMs
+            to compete against OpenAI
+          </p>
+
+          <div className="flex gap-[16px] mt-[32px]">
+            <Button variant="outlined">Buy Spice AI</Button>
+            <Button variant="text">Try Now</Button>
+          </div>
+
+          <div className="mt-[200px]">
+            <animated.div
+              style={cardsAnimation}
+              className="flex gap-[32px] justify-center"
             >
-              <Button variant="text" onClick={() => scrollToSection("home")}>
-                How It Works
-              </Button>
-              <Button onClick={() => scrollToSection("leaderboard")}>
-                Buy Salt AI
-              </Button>
-            </header>
-            <h1
-              className={`${
-                inView ? "gradient-text-secondary" : "gradient-text-primary"
-              } text-[128px] font-medium transition-all duration-500`}
-            >
-              A new economic primitive for funding decentralized AI
-            </h1>
+              <Card title="1,873" subtitle="LLM models" />
+              <Card title="$326,734" subtitle="Paid to data scientists" />
+              <Card title="6,557" subtitle="Developers" />
+            </animated.div>
+          </div>
+        </ParallaxLayer>
 
-            <p>
-              We track, rank and pay for the best open source decentralized LLMs
-              to compete against OpenAI
-            </p>
-
-            <div className="flex gap-[16px] mt-[32px]">
-              <Button variant="outlined">Buy Spice AI</Button>
-              <Button variant="text">Try Now</Button>
-            </div>
-
-            <div className="mt-[200px]">
-              <animated.div
-                ref={ref}
-                style={cardsAnimation}
-                className="flex gap-[32px] justify-center"
-              >
-                <Card title="1,873" subtitle="LLM models" />
-                <Card title="$326,734" subtitle="Paid to data scientists" />
-                <Card title="6,557" subtitle="Developers" />
-              </animated.div>
-            </div>
-          </ParallaxLayer>
-          <ParallaxLayer offset={0} factor={5} speed={-0.78}>
-            <Image
-              src="/planet.png"
-              width={916}
-              height={916}
-              alt=""
-              className="absolute right-0 top-0"
-            />
-          </ParallaxLayer>
+        <ParallaxLayer offset={0} factor={2} speed={-0.6}>
+          <Image
+            src="/planet.png"
+            width={916}
+            height={916}
+            alt=""
+            className="absolute right-0 top-0"
+          />
         </ParallaxLayer>
 
         <ParallaxLayer
           id="about"
           offset={1}
-          className="flex  py-[32px] px-[80px]"
+          className="flex py-[32px] px-[80px]"
         >
-          <div className="flex flex-col gap-12 justify-center items-start text-center max-w-[1150px]">
-            <h3 className="text-start text-[64px] font-medium leading-[110%]">
+          <animated.div
+            ref={aboutRef}
+            style={aboutAnimation}
+            className="flex flex-col gap-12 justify-center items-start text-center w-[80vw] mt-32"
+          >
+            <h3 className="text-start text-[4vw] font-medium leading-[110%]">
               Crowdsourcing our collective intelligence to build the best AI
             </h3>
 
-            <p className="text-start text-[24px] font-normal leading-[32px]">
+            <p className="text-start text-[2vw] font-normal leading-[32px]">
               Open source AI has been lagging behind the likes of Google and
               OpenAI by billions of dollars. <br /> <br /> Salt aims to solve
               that by rewarding open source developers who contribute to the
@@ -168,12 +183,12 @@ export default function Home() {
             </p>
 
             <Button
-              className="box-border px-[20px] text-[24px] py-[24px]"
+              className="box-border px-[2vw] text-[2vw] py-[2.2vw]"
               variant="outlined"
             >
               Use The Cutting Edge AI
             </Button>
-          </div>
+          </animated.div>
         </ParallaxLayer>
         <ParallaxLayer
           id="leaderboard"
@@ -183,13 +198,13 @@ export default function Home() {
           <Table />
         </ParallaxLayer>
 
-        <ParallaxLayer offset={1.99} speed={0.2}>
+        <ParallaxLayer offset={2} speed={0.2}>
           <Image
             src="/roket.png"
             height={750}
             width={226}
             alt="roket"
-            className="absolute left-[25vw] bottom-0"
+            className="h-[60vh] w-auto absolute left-[26vw] bottom-0"
           />
         </ParallaxLayer>
 
@@ -197,112 +212,77 @@ export default function Home() {
           <div className="flex justify-center items-center h-full overflow-hidden">
             <div
               ref={containerRef}
-              className="flex gap-24 sticky top-[30vh] will-change-transform"
+              className="flex gap-24 sticky top-[30vh] "
             >
               <Image
                 src="/solana.svg"
                 width={420}
                 height={100}
                 alt="Image"
-                className="h-[100px] w-auto object-fit flex-shrink-0"
+                className="h-[5vw] w-auto object-fit flex-shrink-0"
               />
               <Image
                 src="/arweave.svg"
                 width={420}
                 height={100}
                 alt="Image"
-                className="h-[100px] w-auto object-fit flex-shrink-0"
+                className="h-[5vw] w-auto object-fit flex-shrink-0"
               />
               <Image
                 src="/bittnsor.svg"
                 width={420}
                 height={100}
                 alt="Image"
-                className="h-[100px] w-auto object-fit flex-shrink-0"
+                className="h-[5vw] w-auto object-fit flex-shrink-0"
               />
               <Image
                 src="/red-c.svg"
                 width={420}
                 height={100}
                 alt="Image"
-                className="h-[100px] w-auto object-fit flex-shrink-0"
+                className="h-[5vw] w-auto object-fit flex-shrink-0"
               />
               <Image
                 src="/message.png"
                 width={420}
                 height={100}
                 alt="Image"
-                className="h-[100px] w-auto object-fit flex-shrink-0"
+                className="h-[5vw] w-auto object-fit flex-shrink-0"
               />
               <Image
                 src="/solana.svg"
                 width={420}
                 height={100}
                 alt="Image"
-                className="h-[100px] w-auto object-fit flex-shrink-0"
+                className="h-[5vw] w-auto object-fit flex-shrink-0"
               />
               <Image
                 src="/arweave.svg"
                 width={420}
                 height={100}
                 alt="Image"
-                className="h-[100px] w-auto object-fit flex-shrink-0"
+                className="h-[5vw] w-auto object-fit flex-shrink-0"
               />
               <Image
                 src="/bittnsor.svg"
                 width={420}
                 height={100}
                 alt="Image"
-                className="h-[100px] w-auto object-fit flex-shrink-0"
+                className="h-[5vw] w-auto object-fit flex-shrink-0"
               />
               <Image
                 src="/red-c.svg"
                 width={420}
                 height={100}
                 alt="Image"
-                className="h-[100px] w-auto object-fit flex-shrink-0"
+                className="h-[5vw] w-auto object-fit flex-shrink-0"
               />
               <Image
                 src="/message.png"
                 width={420}
                 height={100}
                 alt="Image"
-                className="h-[100px] w-auto object-fit flex-shrink-0"
-              />
-              <Image
-                src="/solana.svg"
-                width={420}
-                height={100}
-                alt="Image"
-                className="h-[100px] w-auto object-fit flex-shrink-0"
-              />
-              <Image
-                src="/arweave.svg"
-                width={420}
-                height={100}
-                alt="Image"
-                className="h-[100px] w-auto object-fit flex-shrink-0"
-              />
-              <Image
-                src="/bittnsor.svg"
-                width={420}
-                height={100}
-                alt="Image"
-                className="h-[100px] w-auto object-fit flex-shrink-0"
-              />
-              <Image
-                src="/red-c.svg"
-                width={420}
-                height={100}
-                alt="Image"
-                className="h-[100px] w-auto object-fit flex-shrink-0"
-              />
-              <Image
-                src="/message.png"
-                width={420}
-                height={100}
-                alt="Image"
-                className="h-[100px] w-auto object-fit flex-shrink-0"
+                className="h-[5vw] w-auto object-fit flex-shrink-0"
               />
             </div>
           </div>
@@ -333,7 +313,7 @@ export default function Home() {
               Text here
             </h3>
 
-            <p className="text-start text-[24px] font-normal leading-[32px]">
+            <p className="text-start text-[24px] font-normal leading-[32px] max-w-[45vw]">
               Every month, we run a competition between all the AI models
               submitted on a leaderboard. The best model will be featured and
               will earn tokens.
